@@ -131,7 +131,7 @@ def generate_db_script(session, start_date, end_date):
     conn.set_trace_callback(logging.debug)
     c = conn.cursor()
     logging.info("Updating Database...")
-    f = open("req.sql", "w")
+    
     for releve in j[str(numPce)]['releves']:
         # print(releve)
         req_date = releve['journeeGaziere']
