@@ -34,17 +34,17 @@ Configuration file will not be deleted in future updates.
 
 ## testing before launch
 
+    chmod ugo+x gazpar.py
+
 Manually launch
 
-    python3 gazpar.py
+    ./gazpar.py
 
 
 Then check the login credential if they are ok:
 
     domoticz_gazpar.log
 
-If this is good, you'll get several json files in the directory
-
 ## Add to your cron tab (with crontab -e):
 
-    37 7,17 * * * timeout 30 /home/pi/domoticz/DomoticzGazpar/python3 gazpar.py
+    37 7,17 * * * timeout 30 /home/pi/domoticz/DomoticzGazpar/gazpar.py
