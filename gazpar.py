@@ -102,7 +102,7 @@ def login(username, password):
     return session
 
 
-def generate_db_script(session, start_date, end_date):
+def updatedb(session, start_date, end_date):
     """Retreives monthly energy consumption data."""
     logging.info("retrieving data...")
     logging.debug('start_date: ' + start_date)
@@ -131,7 +131,7 @@ def generate_db_script(session, start_date, end_date):
     conn.set_trace_callback(logging.debug)
     c = conn.cursor()
     logging.info("Updating Database...")
-    
+
     for releve in j[str(numPce)]['releves']:
         # print(releve)
         req_date = releve['journeeGaziere']
@@ -221,7 +221,7 @@ def main():
         today = datetime.date.today()
 
         # Generate DB script
-        generate_db_script(token, dtostr(today - relativedelta(days=int(nbDaysImported))),
+        updatedb(token, dtostr(today - relativedelta(days=int(nbDaysImported))),
                            dtostr(today))
 
     except GazparServiceException as err:
