@@ -28,6 +28,7 @@ import sys
 import json
 from dateutil.relativedelta import relativedelta
 import sqlite3
+from domoticzHandler import domoticzHandler
 
 LOGIN_BASE_URI = 'https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth'
 API_BASE_URI = 'https://monespace.grdf.fr/'
@@ -43,8 +44,6 @@ script_dir = os.path.dirname(os.path.realpath(__file__)) + os.path.sep
 configuration_file = script_dir + '/domoticz_gazpar.cfg'
 logging.config.fileConfig(configuration_file, defaults={
                           'logfilename': script_dir + '/domoticz_gazpar.log'}, disable_existing_loggers=False)
-
-logger = logging.getLogger(__name__)
 
 
 class GazparServiceException(Exception):
@@ -62,7 +61,6 @@ def login(username, password):
     """Logs the user into the GRDF API.
     """
     logging.info("logging in as %s...", username)
-
     session = requests.Session()
 
     payload = {
@@ -80,13 +78,13 @@ def login(username, password):
     try:
         resp1 = session.post(LOGIN_BASE_URI, data=payload, headers=headers)
     except requests.exceptions.RequestException as err:
-        loggig.error(
+        logging.error(
             "Error while connecting to https://sofa-connexion.grdf.fr")
         logging.error("Error %s", err)
         raise SystemExit(e)
 
     if resp1.status_code != requests.codes.ok:
-        loggig.error("Login call - error status : %s", resp1.status_code)
+        logging.error("Login call - error status : %s", resp1.status_code)
         sys.exit(1)
 
     # 2nd request
@@ -104,7 +102,7 @@ def login(username, password):
 
 def updatedb(session, start_date, end_date):
     """Retreives monthly energy consumption data."""
-    logging.info("retrieving data...")
+    logging.debug("retrieving data...")
     logging.debug('start_date: ' + start_date)
     logging.debug('  end_date: ' + end_date)
 
@@ -133,7 +131,7 @@ def updatedb(session, start_date, end_date):
     logging.info("Updating Database...")
 
     for releve in j[str(numPce)]['releves']:
-        # print(releve)
+
         req_date = releve['journeeGaziere']
         conso = releve['energieConsomme']
         volume = releve['volumeBrutConsomme']
@@ -204,8 +202,8 @@ def get_config(file):
         devicerowid = config['DOMOTICZ']['DOMOTICZ_ID']
         devicerowidm3 = config['DOMOTICZ']['DOMOTICZ_ID_M3']
         nbDaysImported = config['GRDF']['NB_DAYS_IMPORTED']
-        database = config['SETTINGS']['DB_PATH'] + "/domoticz.db"
-        logging.debug("Database is %s", database)
+        database = config['DOMOTICZ_SETTINGS']['DB_PATH'] + "/domoticz.db"
+
     else:
         logging.error("get_config %s is not accessible", file)
         sys.exit(1)
@@ -220,9 +218,9 @@ def main():
         token = login(userName, password)
         today = datetime.date.today()
 
-        # Generate DB script
+        # Update database
         updatedb(token, dtostr(today - relativedelta(days=int(nbDaysImported))),
-                           dtostr(today))
+                 dtostr(today))
 
     except GazparServiceException as err:
         logging.error(err)
