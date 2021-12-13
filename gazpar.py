@@ -30,6 +30,7 @@ import json
 from dateutil.relativedelta import relativedelta
 import sqlite3
 from domoticzHandler import domoticzHandler
+import math
 
 LOGIN_BASE_URI = 'https://login.monespace.grdf.fr/sofit-account-api/api/v1/auth'
 API_BASE_URI = 'https://monespace.grdf.fr/'
@@ -135,10 +136,13 @@ def updatedb(session, start_date, end_date):
     for releve in j[str(numPce)]['releves']:
         req_date = releve['journeeGaziere']
         conso = releve['energieConsomme']
-        volume = releve['volumeBrutConsomme']
+        coeff = releve['coeffConversion']
+        logging.debug("coeffConversion: %s ", coeff)
+        volumeBrut = releve['volumeBrutConsomme']
         indexm3 = releve['indexDebut']
         try:
             index = index + conso
+            volume = math.ceil( (conso/coeff)*1000)
         except TypeError:
             logging.warning("Invalid Entry %s", req_date)
             continue
@@ -156,7 +160,7 @@ def updatedb(session, start_date, end_date):
                 c.execute("DELETE FROM Meter_Calendar WHERE devicerowid = ? and date = ?",
                           (devicerowidm3, req_date))
                 c.execute("INSERT INTO Meter_Calendar (DeviceRowID,Value,Counter,Date) VALUES (?,?,?,?)",
-                          (devicerowidm3, int(volume) * 1000, indexm3, req_date))
+                          (devicerowidm3, int(volume) , indexm3, req_date))
             except sqlite3.Error as err:
                 logging.error("sqlite3 error: %s", err)
 
