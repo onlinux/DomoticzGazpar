@@ -166,11 +166,11 @@ def updatedb(session, start_date, end_date):
 
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if devicerowid:
-        c.execute("UPDATE DeviceStatus SET lastupdate = ? WHERE id = ?",
-                  (today, devicerowid))
+        c.execute("UPDATE DeviceStatus SET lastupdate = ? , sValue = ? WHERE id = ?",
+                  (today, int(conso) * 1000, devicerowid))
     if devicerowidm3:
-        c.execute("UPDATE DeviceStatus SET lastupdate = ? WHERE id = ?",
-                  (today, devicerowidm3))
+        c.execute("UPDATE DeviceStatus SET lastupdate = ? , sValue = ? WHERE id = ?",
+                  (today, int(volume), devicerowidm3))
 
     # Trace of all changes within logging DEBUG level
     c.fetchone()

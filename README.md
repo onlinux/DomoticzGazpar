@@ -5,7 +5,7 @@ Import data from GDRF to Domoticz
 
 
 # create a device in Domoticz
-- In Domoticz, go to hardware, create a virtual "rfx meter counter" or "Dummy".
+- In Domoticz, go to hardware, create a virtual "Managed counter" or "Dummy".
   You may as well create a virtual 'Smart Meter, Gas' device in m3
 - Then in Devices, add it to the devices. (mark down the id for later).
 - When in Utility, edit the device and change it to Electric (instant+counter) type.
@@ -75,3 +75,9 @@ to DEBUG and then errors will be logged in domoticz log file or
 ## Add to your cron tab (with crontab -e):
 
     37 7,17 * * * timeout 30 /home/pi/domoticz/DomoticzGazpar/gazpar.py
+
+
+Gazpar custom icons
+
+<img  src="./images/gazpar48.png" width="100" alt="gazpar logo" />
+You may now use the Zipped folder custom_icons.zip in Domoticz by uploading it in the Setup - Custom Icon menu.
