@@ -77,7 +77,7 @@ to DEBUG and then errors will be logged in domoticz log file or
     37 7,17 * * * timeout 30 /home/pi/domoticz/DomoticzGazpar/gazpar.py
 
 
-Gazpar custom icons
+## Gazpar custom icons
 
-<img  src="./images/gazpar48.png" width="100" alt="gazpar logo" />
+<img  src="./images/gaz48.png" width="100" alt="gazpar logo" />
 You may now use the Zipped folder custom_icons.zip in Domoticz by uploading it in the Setup - Custom Icon menu.
