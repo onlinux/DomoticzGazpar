@@ -98,7 +98,8 @@ def login(username, password):
     resp2 = session.get(API_BASE_URI, allow_redirects=True)
     if resp2.status_code != requests.codes.ok:
         logging.error("Login 2nd call - error status : %s", resp2.status_code)
-
+        sys.exit(1)
+        
     logging.info("logged in successfully!")
     return session
 
@@ -114,6 +115,7 @@ def updatedb(session, start_date, end_date):
         'https://monespace.grdf.fr/api/e-connexion/users/pce/historique-consultation')
     if resp3.status_code != requests.codes.ok:
         logging.error("Get NumPce call - error status : %s", resp3.status_code)
+        sys.exit(1)
 
     logging.debug("Get NumPce: %s", resp3.text)
 
