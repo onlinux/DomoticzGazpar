@@ -41,7 +41,7 @@ class domoticzHandler(logging.handlers.HTTPHandler):
         )
 
         return {
-            'level': f'{level}',
+            'level': level,
             'type': 'command',
             'param': 'addlogmessage',
             'message': f'{self.prefix} ' f'{record.levelname} ' f'{text}'

@@ -100,7 +100,7 @@ def login(username, password):
     if resp2.status_code != requests.codes.ok:
         logging.error("Login 2nd call - error status : %s", resp2.status_code)
         sys.exit(1)
-        
+
     logging.info("logged in successfully!")
     return session
 
@@ -132,7 +132,7 @@ def updatedb(session, start_date, end_date):
     except TypeError:
             logging.error("TypeError when reading index %s", j)
             sys.exit(1)
-            
+
     conn = sqlite3.connect(database)
     # This attaches the tracer
     conn.set_trace_callback(logging.debug)
@@ -146,6 +146,7 @@ def updatedb(session, start_date, end_date):
         logging.debug("coeffConversion: %s ", coeff)
         volumeBrut = releve['volumeBrutConsomme']
         indexm3 = releve['indexDebut']
+        volume = 0;
         try:
             index = index + conso
             volume = math.ceil( (conso/coeff)*1000)
